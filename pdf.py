@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-import cStringIO
+import io
 
 import pdfminer
 import pdfminer.pdfinterp
@@ -17,17 +17,16 @@ def generate_pdf_page_text(filename):
     # create a `pdfminer.pdfinterp.PDFResourceManager` object
     resource_manager = pdfminer.pdfinterp.PDFResourceManager()
 
-    # create a `cStringIO.StringIO` object which will be used by the
+    # create a `io.StringIO` object which will be used by the
     # `TextConverter` (see below) to store the decoded text content
     # of the PDF pages
-    str_return = cStringIO.StringIO()
+    str_return = io.StringIO()
 
     # create a new `pdfminer.converter.TextConverter` that will process
     # and decode the content of the PDF pages
     device = pdfminer.converter.TextConverter(
         resource_manager,
         str_return,
-        codec="utf-8",
         laparams=pdfminer.layout.LAParams()
     )
 
@@ -37,7 +36,7 @@ def generate_pdf_page_text(filename):
         resource_manager, device)
 
     # open the define PDF file
-    fid = open(filename, str("rb"))
+    fid = open(filename, "rb")
 
     # get a PDF-page generator on the opened PDF file
     generator_pages = pdfminer.pdfpage.PDFPage.get_pages(fid)
